@@ -16,12 +16,15 @@ async function run() {
   try {
     const animalCollections = client.db('photo-gallery').collection('animals');
     const commentCollections = client.db('photo-gallery').collection('comments');
-    app.get('/animals', async (req, res) => {
-      const query = {};
-      const cursor = animalCollections.find(query);
-      const result = await cursor.toArray()
+    const plantCollections = client.db('photo-gallery').collection('plants');
+    //animals
+    app.get('/animal/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { category: id };
+      const result = await animalCollections.find(filter).toArray();
       res.send(result);
     })
+
     app.get('/animals/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
@@ -40,6 +43,20 @@ async function run() {
       const result = await commentCollections.find(filter).toArray();
       res.send(result);
     })
+    //plants
+    app.get('/plant/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { category: id };
+      const result = await plantCollections.find(filter).toArray();
+      res.send(result);
+    })
+    app.get('/plants/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const result = await plantCollections.findOne(filter);
+      res.send(result);
+    })
+
 
 
   }
